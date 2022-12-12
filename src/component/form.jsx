@@ -12,7 +12,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./form.css";
 
 function Formlogin() {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [validated, setValidated] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleSubmit = (event) => {
     const form = event.currentTarget;
@@ -20,7 +23,14 @@ function Formlogin() {
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
+    } else if (password !== confirmPassword) {
+      setError(true);
+      event.preventDefault();
+      event.stopPropagation();
+    } else {
+      setError(false);
     }
+
     setValidated(true);
   };
   return (
@@ -61,30 +71,61 @@ function Formlogin() {
                 label="Password"
                 controlId="formBasicPassword"
               >
-                <Form.Control required type="password" placeholder="Password" />
+                <Form.Control
+                  required
+                  type="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+
                 <Form.Control.Feedback type="invalid">
                   Masukan password
                 </Form.Control.Feedback>
                 <Form.Control.Feedback>Bagus!</Form.Control.Feedback>
               </FloatingLabel>
-              <Form.Group className="mb-3" controlId="formJenisKelamin">
-                <div className="d-flex flex-row justify-content-start gap-5">
-                  <Form.Check
-                    type="radio"
-                    id="radio"
-                    name="jeniskelamin"
-                    label="Laki-laki"
-                    required
-                    feedback="Ceklist terlebih dahulu!"
-                    feedbackType="invalid"
-                  />
-                  <Form.Check
-                    type="radio"
-                    id="radio"
-                    name="jeniskelamin"
-                    label="Perempuan"
-                  />
-                </div>
+              <FloatingLabel
+                className="mb-3"
+                label="Konfirmasi Password"
+                controlId="formBasicConfirmPassword"
+              >
+                <Form.Control
+                  required
+                  type="password"
+                  placeholder="Konfirmasi Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                />
+
+                <Form.Control.Feedback type="invalid">
+                  Masukan password
+                </Form.Control.Feedback>
+                {error && (
+                  <Form.Control.Feedback className="text-danger">
+                    Password tidak sama!
+                  </Form.Control.Feedback>
+                )}
+              </FloatingLabel>
+
+              <Form.Group
+                className="mb-3 d-flex flex-row justify-content-start gap-5"
+                controlId="formJenisKelamin"
+              >
+                <Form.Check
+                  type="radio"
+                  id="radio"
+                  name="jeniskelamin"
+                  label="Laki-laki"
+                  required
+                  feedback="Ceklist terlebih dahulu!"
+                  feedbackType="invalid"
+                />
+                <Form.Check
+                  type="radio"
+                  id="radio"
+                  name="jeniskelamin"
+                  label="Perempuan"
+                />
               </Form.Group>
               <Form.Group className="mb-3" controlId="formBasicCheckbox">
                 <Form.Check
